@@ -1,5 +1,0 @@
-f=open("hey.txt",'r+')
-print(f.read(3))
-print(f.tell())
-d=f.write("3")
-f.close()
