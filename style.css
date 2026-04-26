@@ -12,11 +12,17 @@ h1 {
     background: white;
     margin: 20px auto;
     padding: 20px;
-    width: 50%;
+    width: 80%;
     border-radius: 10px;
     box-shadow: 0px 0px 10px gray;
 }
 
-ul {
-    list-style: none;
+table {
+    margin: auto;
+    border-collapse: collapse;
+}
+
+td, th {
+    border: 1px solid black;
+    padding: 8px;
 }

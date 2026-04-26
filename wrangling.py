@@ -53,3 +53,33 @@ with open("pipeline_log.txt", "a") as f:
     f.write(f"Pipeline ran at: {current_time}\n")
 
 print("✅ Pipeline Completed Successfully!")
+# -----------------------
+# CREATE HTML OUTPUT
+# -----------------------
+
+html_table = df.to_html(index=False)
+
+html_content = f"""
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DataFlow Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>🚀 DataFlow Pipeline Dashboard</h1>
+<p>Auto Generated Data</p>
+
+<div class="card">
+    <h2>Processed Data</h2>
+    {html_table}
+</div>
+
+</body>
+</html>
+"""
+with open("index.html", "w", encoding="utf-8") as f:
+    f.write(html_content)
+
+print("🌐 HTML Dashboard Generated!")
