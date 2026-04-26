@@ -1,54 +1,55 @@
 import pandas as pd
 import os
+from datetime import datetime
+
+print("🚀 Pipeline Started...")
 
 # -----------------------
-# 🔹 STEP 1: CREATE DATA LAKE STRUCTURE
+# CREATE DATA LAKE
 # -----------------------
 os.makedirs("data_lake/raw", exist_ok=True)
 os.makedirs("data_lake/processed", exist_ok=True)
 os.makedirs("data_lake/curated", exist_ok=True)
 
 # -----------------------
-# 🔹 STEP 2: LOAD DATA (RAW)
+# LOAD DATA
 # -----------------------
 df = pd.read_csv("data.csv")
+print("📥 Loaded Data:", df.shape)
 
-# Save raw copy
+# Save raw
 df.to_csv("data_lake/raw/raw_data.csv", index=False)
 
-print("🔴 Raw Data:\n", df.head())
-
 # -----------------------
-# 🔹 STEP 3: DATA WRANGLING
+# DATA WRANGLING
 # -----------------------
-
-# Handle missing values (new pandas version)
 df = df.ffill()
-
-# Remove duplicates
 df.drop_duplicates(inplace=True)
 
-# Filter useful data
 if "Salary" in df.columns:
     df = df[df["Salary"] > 50000]
 
-# Save processed data
-df.to_csv("data_lake/processed/processed_data.csv", index=False)
+print("🧹 After Cleaning:", df.shape)
 
 # -----------------------
-# 🔹 STEP 4: DATA CURATION
+# DATA CURATION
 # -----------------------
+current_time = datetime.now()
 
-# Add metadata
-df["Processed_Date"] = pd.Timestamp.now()
+df["Processed_Date"] = current_time
+df["Year"] = current_time.year
+df["Month"] = current_time.month
 
-# Add partitioning (real-world concept)
-df["Year"] = df["Processed_Date"].dt.year
-df["Month"] = df["Processed_Date"].dt.month
+# Save curated
+output_path = "data_lake/curated/cleaned_data.csv"
+df.to_csv(output_path, index=False)
 
-# Save curated data
-curated_path = "data_lake/curated/cleaned_data.csv"
-df.to_csv(curated_path, index=False)
+print("📦 Saved to:", output_path)
 
-print("\n🟢 Curated Data Saved At:", curated_path)
-print(df.head())
+# -----------------------
+# EXTRA: CREATE RUN LOG
+# -----------------------
+with open("pipeline_log.txt", "a") as f:
+    f.write(f"Pipeline ran at: {current_time}\n")
+
+print("✅ Pipeline Completed Successfully!")
