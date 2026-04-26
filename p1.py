@@ -1,0 +1,6 @@
+print("start")
+f=open("sample.txt",'a+')
+d=f.read()
+v=f.write("hhhhhhhhhhh")
+print(d)
+f.close()
